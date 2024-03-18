@@ -23,10 +23,15 @@ async function findByIdAndDelete(id) {
     return teacherModel.findByIdAndDelete(id);
 };
 
+async function findOne(filter) {
+    return teacherModel.findOne(filter);
+};
+
 module.exports = {
     create,
     find,
     findById,
     findByIdAndUpdate,
     findByIdAndDelete,
+    findOne
 };

@@ -6,11 +6,11 @@ const middleware = require('../middlewares/teachers.middleware');
 
 router.route('/')
     .get(controller.getTeachers)
-    .post(controller.createTeacher);
+    .post(middleware.teacherDataValidation, controller.createTeacher);
 
 router.route('/:teacherId')
-    .get(middleware.teacherByIdValidation,controller.getTeacher)
-    .patch(middleware.teacherByIdValidation, controller.updateTeacher)
+    .get(middleware.teacherByIdValidation, controller.getTeacher)
+    .patch(middleware.teacherByIdValidation, middleware.teacherDataValidation, controller.updateTeacher)
     .delete(middleware.teacherByIdValidation, controller.deleteTeacher);
 
 module.exports = router;
