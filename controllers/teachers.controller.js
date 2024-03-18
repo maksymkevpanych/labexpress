@@ -1,6 +1,6 @@
 const teacherService = require('../services/teachers.service');
 
-async function createTeacher(req, res) {
+async function createTeacher(req, res, next) {
     try {
        const newTeacher = await teacherService.create(req.body);
 
@@ -9,30 +9,22 @@ async function createTeacher(req, res) {
             data: newTeacher,
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            status: 500,
-            error: err,
-        });
+        next(createError.InternalServerError(err.message));
     }
 };
 
-async function getTeachers(req, res) {
+async function getTeachers(req, res, next) {
     try {
         res.status(200).json({
             status: 200,
             data: await teacherService.find(),
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            status: 500,
-            error: err,
-        });
+        next(createError.InternalServerError(err.message));
     }
 };
 
-async function getTeacher(req, res) {
+async function getTeacher(req, res, next) {
     try {
         const { teacherId } = req.params;
         const teacher = await teacherService.findById(teacherId);
@@ -40,7 +32,7 @@ async function getTeacher(req, res) {
         if (!teacher) {
             return res.status(400).json({
                 status: 400,
-                message: 'Teacher not found.',
+                error:{ message: 'Teacher not found.'},
             });
         }
 
@@ -49,15 +41,11 @@ async function getTeacher(req, res) {
             data: teacher,
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            status: 500,
-            error: err,
-        });
+        next(createError.InternalServerError(err.message));
     }
 };
 
-async function updateTeacher(req, res) {
+async function updateTeacher(req, res, next) {
     try {
         const { teacherId } = req.params;
         const teacherData = req.body;
@@ -67,15 +55,11 @@ async function updateTeacher(req, res) {
             status: 200,
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            status: 500,
-            error: err,
-        });
+        next(createError.InternalServerError(err.message));
     }
 };
 
-async function deleteTeacher(req, res) {
+async function deleteTeacher(req, res, next) {
     try {
         const { teacherId } = req.params;
         await teacherService.findByIdAndDelete(teacherId);
@@ -84,11 +68,7 @@ async function deleteTeacher(req, res) {
             status: 200,
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            status: 500,
-            error: err,
-        });
+        next(createError.InternalServerError(err.message));
     }
 };
 
